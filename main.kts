@@ -28,17 +28,9 @@ fun mathOp(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
     return operation(x, y)                                          
 }
 // write a class "Person" with first name, last name and age
-class Person (var firstName: String, var lastName: String, var age: Int ){
-    // var firstName: String
-    // var lastName: String
-    // var age: Int
-    
-    // constructor(val firstName: String, val lastName: String, val age: Int) {
-    //     this.firstName = firstName
-    //     this.lastName = lastName
-    //     this.age = age
-    // }
-    var debugString = "[Person firstName:" + this.firstName + " lastName:" + this.lastName + " age:" + this.age + "]"  
+class Person(var firstName: String, var lastName: String, var age: Int) {
+    val debugString get()= "[Person firstName:$firstName lastName:$lastName age:$age]"
+
     fun equals(p1: Person, p2: Person): Boolean {
         if (p1.firstName != p2.firstName){
             return false
@@ -85,11 +77,9 @@ class Money {
         }
         return result
     }
-    operator fun plus(to: Money): Money {
-        if (this.currency == to.currency) {
-            return Money(this.amount + to.amount, this.currency)
-        }
-        return Money(this.convert(to.currency).amount + to.amount, to.currency)
+    
+    operator fun plus(other: Money): Money {
+        return Money(this.amount + other.convert(this.currency).amount, this.currency)
     }
 }
 // ============ DO NOT EDIT BELOW THIS LINE =============
@@ -147,7 +137,6 @@ val p1 = Person("Ted", "Neward", 47)
 print(if (p1.firstName == "Ted") "." else "!")
 p1.age = 48
 print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "!")
-print(p1.debugString)
 println("")
 
 print("Money tests: ")
