@@ -3,15 +3,95 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
-
+fun whenFn(obj: Any): Any {
+    val result = when (obj) {                  
+        "Hello" -> "world"                             
+        is String -> "Say what?"            
+        0 -> "zero"            
+        1 -> "one" 
+        in 2..10 -> "low number"
+        is Int -> "a number"      
+        else -> "I don't understand"             
+    }
+    return result
+}
 // write an "add" function that takes two Ints, returns an Int, and adds the values
+fun add(x: Int, y: Int): Int {                                          
+    return x + y
+}
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(x: Int, y: Int): Int {                                          
+    return x - y
+}
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
-
+fun mathOp(x: Int, y: Int, operation: (Int, Int) -> Int): Int {  
+    return operation(x, y)                                          
+}
 // write a class "Person" with first name, last name and age
+class Person (var firstName: String, var lastName: String, var age: Int ){
+    // var firstName: String
+    // var lastName: String
+    // var age: Int
+    
+    // constructor(val firstName: String, val lastName: String, val age: Int) {
+    //     this.firstName = firstName
+    //     this.lastName = lastName
+    //     this.age = age
+    // }
+    var debugString = "[Person firstName:" + this.firstName + " lastName:" + this.lastName + " age:" + this.age + "]"  
+    fun equals(p1: Person, p2: Person): Boolean {
+        if (p1.firstName != p2.firstName){
+            return false
+        }
+        if (p1.lastName != p2.lastName){
+            return false
+        }
+        if (p1.age != p2.age){
+            return false
+        }
+        return true
+    }
 
+    override fun hashCode(): Int {
+        return age * firstName.hashCode() * lastName.hashCode()
+    }
+}
 // write a class "Money"
-
+class Money {
+    val strings = arrayOf("USD", "EUR", "CAN", "GBP")
+    var amount: Int
+    var currency: String
+    
+    constructor(amount: Int, currency: String) {
+        this.amount = if(amount > 0) amount else throw IllegalArgumentException("Amount must be greater than zero")
+        this.currency = if(strings.contains(currency)) currency else throw IllegalArgumentException("Invalid currency type")
+    }
+    fun convert(to: String): Money {
+        var converted = commonCurr(this.amount, this.currency)
+        converted = when (to) {
+            "USD" -> converted * 2
+            "EUR" -> converted * 3
+            "CAN" -> (5 * converted) / 2
+            else -> converted
+        }
+        return Money(converted, to)
+    }
+    private fun commonCurr(amount: Int, curr: String): Int {
+        var result = when(curr) {
+            "USD" -> amount / 2
+            "EUR" -> amount / 3
+            "CAN" -> (2 * amount) / 5
+            else -> amount
+        }
+        return result
+    }
+    operator fun plus(to: Money): Money {
+        if (this.currency == to.currency) {
+            return Money(this.amount + to.amount, this.currency)
+        }
+        return Money(this.convert(to.currency).amount + to.amount, to.currency)
+    }
+}
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
 print("When tests: ")
@@ -67,6 +147,7 @@ val p1 = Person("Ted", "Neward", 47)
 print(if (p1.firstName == "Ted") "." else "!")
 p1.age = 48
 print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "!")
+print(p1.debugString)
 println("")
 
 print("Money tests: ")
